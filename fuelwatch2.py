@@ -6,14 +6,14 @@ import itertools
 
 # Parameters list
 product = [6]
-region = [25, 26]
+region = [25, 26, 27]
 tomorrow = ['', '&Day=tomorrow']
 
 links = [
          "http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product={" \
          "}&Region={}{}".format(*i)
          for i in itertools.product(product, region, tomorrow)
-]
+         ]
 
 item_properties = []
 
@@ -25,15 +25,15 @@ for link in links:
         temp_date = datetime.strptime(item.find('./date').text,
                                       '%Y-%m-%d').date()
         item_properties.append({
-                               'brand': item.find('./brand').text,
-                               'price': float(item.find('./price').text),
-                               'location': item.find('./location').text,
-                               'address': item.find('./address').text,
-                               'tomorrow': True if temp_date != date.today() else False
-                               })
+                             'brand': item.find('./brand').text,
+                             'price': float(item.find('./price').text),
+                             'location': item.find('./location').text,
+                             'address': item.find('./address').text,
+                             'tomorrow': True if temp_date != date.today() else False
+                             })
 
 new_item_properties = sorted(item_properties,
-                             itemgetter('price', 'brand', 'address'))
+                             key=itemgetter('price', 'brand', 'address'))
 
 current_date_time = datetime.strftime(datetime.now(), '%d/%m/%Y %I:%M:%S %p')
 
@@ -61,4 +61,3 @@ template = '{}<html><head>{}{}</head><body><table>{' \
 
 with open("./output.html", "w") as f:
     f.write(template)
-
