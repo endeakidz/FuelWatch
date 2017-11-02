@@ -11,8 +11,9 @@ tomorrow = ['', '&Day=tomorrow']
 
 links = [
          "http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product={" \
-         "}&Region={}{}".format(
-                                *i) for i in itertools.product(product, region, tomorrow)]
+         "}&Region={}{}".format(*i)
+         for i in itertools.product(product, region, tomorrow)
+     ]
 
 item_properties = []
 
@@ -28,7 +29,7 @@ for link in links:
                                'address': item.find('./address').text,
                                'tomorrow': True if datetime.strptime(item.find('./date').text,
                                                                      '%Y-%m-%d').date() !=
-                               date.today() else False
+                                                                     date.today() else False
                                })
 
 new_item_properties = sorted(item_properties,
@@ -40,13 +41,11 @@ table_string = ""
 for item in new_item_properties:
     if item['tomorrow'] == False:
         table_string += "<tr><td>{price}</td><td>{location}</td><td>{" \
-            "address}</td><td>{brand}</td></tr>".format(
-                                                        **item)
+            "address}</td><td>{brand}</td></tr>".format(**item)
     else:
         table_string += '<tr class="highlight"><td>{price}</td><td>{' \
             'location}</td><td>{address}</td><td>{' \
-                'brand}</td></tr>'.format(
-                                          **item)
+                'brand}</td></tr>'.format(**item)
 
 style = '''
     <style style="text/css">
@@ -59,8 +58,7 @@ style = '''
 header = '98 RON for NORTH RIVER and SOUTH RIVER'
 template = '<!DOCTYPE html>' + style + '<html><head>{}</head><head '\
     'style="background-color:#00FFFF">{'\
-        '}</head><body><table>{}</table></body></html>'.format(
-                                                               current_date_time, header, table_string)
+        '}</head><body><table>{}</table></body></html>'.format(current_date_time, header, table_string)
 
 with open("./output.html", "w") as f:
     f.write(template)
