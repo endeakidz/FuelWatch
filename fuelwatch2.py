@@ -26,13 +26,9 @@ for link in links:
                                'price': float(item.find('./price').text),
                                'location': item.find('./location').text,
                                'address': item.find('./address').text,
-                               'tomorrow': True if datetime.strptime(item.find('./date').text,
-                                                                     '%Y-%m-%d').date() != date.today() else False})
+                               'tomorrow': True if datetime.strptime(item.find('./date').text,'%Y-%m-%d').date() != date.today() else False})
 
 new_item_properties = sorted(item_properties, key=itemgetter('price', 'brand', 'address'))
-
-for item in new_item_properties:
-    print('{price:.2f} {location:20s}Address: {address:50s}{brand:20s}{tomorrow:5b}'.format(**item))
 
 current_date_time = datetime.strftime(datetime.now(), '%d/%m/%Y %I:%M:%S %p')
 
@@ -52,8 +48,8 @@ style = '''
     '''
 
 header = '98 RON for NORTH RIVER and SOUTH RIVER'
-template = '<!DOCTYPE html>' + style + '<html><head>{}</head><head style="background-color:#00FFFF">{}</head><body><table>{}</table></body></html>'.format(
-                                                                                                                                                           current_date_time, header, table_string)
+template = '<!DOCTYPE html>' + style + '<html><head>{}</head><head style="background-color:#00FFFF">{}</head><body><table>{}</table></body></html>'.format(current_date_time, header, table_string)
 
 with open("./output.html", "w") as f:
     f.write(template)
+
