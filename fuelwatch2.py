@@ -13,7 +13,7 @@ links = [
          "http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS?Product={" \
          "}&Region={}{}".format(*i)
          for i in itertools.product(product, region, tomorrow)
-     ]
+]
 
 item_properties = []
 
@@ -22,18 +22,18 @@ for link in links:
     items = content.findall('.//item')
     
     for item in items:
-        item_properties.append({
-                               'brand': item.find('./brand').text,
-                               'price': float(item.find('./price').text),
-                               'location': item.find('./location').text,
-                               'address': item.find('./address').text,
-                               'tomorrow': True if datetime.strptime(item.find('./date').text,
-                                                                     '%Y-%m-%d').date() !=
-                                                                     date.today() else False
-                               })
+        temp_date = datetime.strptime(item.find('./date').text,
+                                      '%Y-%m-%d').date()
+      item_properties.append({
+                             'brand': item.find('./brand').text,
+                             'price': float(item.find('./price').text),
+                             'location': item.find('./location').text,
+                             'address': item.find('./address').text,
+                             'tomorrow': True if temp_date != date.today() else False
+                             })
 
 new_item_properties = sorted(item_properties,
-                             key=itemgetter('price', 'brand', 'address'))
+                             itemgetter('price', 'brand', 'address'))
 
 current_date_time = datetime.strftime(datetime.now(), '%d/%m/%Y %I:%M:%S %p')
 
@@ -49,16 +49,17 @@ for item in new_item_properties:
 
 style = '''
     <style style="text/css">
-    .highlight{
+    .highlight {
     background-color:#00FFFF
     }
     </style>
     '''
 
 header = '98 RON for NORTH RIVER and SOUTH RIVER'
-template = '<!DOCTYPE html>' + style + '<html><head>{}</head><head '\
-    'style="background-color:#00FFFF">{'\
-        '}</head><body><table>{}</table></body></html>'.format(current_date_time, header, table_string)
+template = '{}<html><head>{}{}</head><body><table>{' \
+    '}</table></body></html>'.format(
+                                     style, current_date_time, header, table_string)
 
 with open("./output.html", "w") as f:
     f.write(template)
+
