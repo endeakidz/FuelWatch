@@ -24,13 +24,13 @@ for link in links:
     for item in items:
         temp_date = datetime.strptime(item.find('./date').text,
                                       '%Y-%m-%d').date()
-      item_properties.append({
-                             'brand': item.find('./brand').text,
-                             'price': float(item.find('./price').text),
-                             'location': item.find('./location').text,
-                             'address': item.find('./address').text,
-                             'tomorrow': True if temp_date != date.today() else False
-                             })
+        item_properties.append({
+                               'brand': item.find('./brand').text,
+                               'price': float(item.find('./price').text),
+                               'location': item.find('./location').text,
+                               'address': item.find('./address').text,
+                               'tomorrow': True if temp_date != date.today() else False
+                               })
 
 new_item_properties = sorted(item_properties,
                              itemgetter('price', 'brand', 'address'))
@@ -57,8 +57,7 @@ style = '''
 
 header = '98 RON for NORTH RIVER and SOUTH RIVER'
 template = '{}<html><head>{}{}</head><body><table>{' \
-    '}</table></body></html>'.format(
-                                     style, current_date_time, header, table_string)
+    '}</table></body></html>'.format(style, current_date_time, header, table_string)
 
 with open("./output.html", "w") as f:
     f.write(template)
